@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple WebSocket chat</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script type="text/javascript" charset="utf-8" src="index.js"></script>
+</head>
+<body class="center">
+<h2 class="welcome_message">Welcome to WebSocket chat!</h2>
+<div id="login_div">
+    <form name="login_form">
+        <label>Enter username:</label>
+        <input type="text" name="username"/>
+        <input type="submit" value="Login"/>
+    </form>
+</div>
+<div id="room_div" style="display: none">
+    <div id="messages_list"></div>
+    <form name="send_message_form">
+        <label>Msg:</label>
+        <input type="text" name="message"/>
+        <input type="submit" value="Send"/>
+    </form>
+</div>
+</body>
+</html>
