@@ -5,7 +5,8 @@
   {mod, { websocket_chat_app, []}},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+    cowboy
    ]},
   {env,[]},
   {modules, []},

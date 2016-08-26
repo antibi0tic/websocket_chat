@@ -1,4 +1,4 @@
-var socket = new WebSocket("ws://localhost:8089");
+var socket = new WebSocket("ws://localhost:8088/websocket");
 
 socket.onopen = function() {
   alert("Connection opened.");
