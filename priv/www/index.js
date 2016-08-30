@@ -1,40 +1,68 @@
-var socket = new WebSocket("ws://localhost:8088/websocket");
+var socket;
+var username;
 
-socket.onopen = function() {
-  alert("Connection opened.");
-};
+function start_chat()
+{
+    socket = new WebSocket("ws://localhost:8088/websocket");
+    username = "";
 
-socket.onclose = function(event) {
-  if (event.wasClean) {
-    alert('Connection closed. Refresh page to chat again.');
-  } else {
-    alert('Connection lost. Refresh page to chat again.');
-  }
-};
+    socket.onopen = function() {
+      alert("Connection opened.");
+    };
 
-socket.onmessage = function(event) {
-  alert("Recieved: " + event.data);
-};
+    socket.onclose = function(event) {
+      logout();
+      if (event.wasClean) {
+        alert('Connection closed. Refresh page to chat again.');
+      } else {
+        alert('Connection lost. Refresh page to chat again.');
+      }
+    };
 
-socket.onerror = function(error) {
-  alert("Error: " + error.message);
-};
+    socket.onerror = function(error) {
+      alert("Error: " + error.message);
+    };
 
-document.forms.login_form.onsubmit = function() {
-  var outgoingMessage = {
-    room: "main",
-    req: "login",
-    data: this.username.value
-  };
+    document.forms.login_form.onsubmit = function() {
+      username = this.username.value.trim();
+      if (!username) {
+        alert("Enter username");
+      } else {
+        var outgoingMessage = {
+                room: "main",
+                req: "login",
+                data: username
+              };
 
-  socket.send(outgoingMessage);
-  return false;
-};
+        socket.send(outgoingMessage);
+      }
+      return false;
+    };
 
-socket.onmessage = function(event) {
-  var incomingMessage = event.data;
-  showMessage(incomingMessage);
-};
+    document.forms.send_message_form.onsubmit = function() {
+          if (!username) {
+            alert("Enter username");
+          } else {
+            var outgoingMessage = {
+                    room: "main",
+                    req: "send_message",
+                    data: this.message.value.trim()
+                  };
+
+            socket.send(outgoingMessage);
+          }
+          return false;
+        };
+
+    socket.onmessage = function(event) {
+      var incomingMessage = event.data;
+      if (incomingMessage === "welcome") {
+        login_success();
+      } else {
+        showMessage(incomingMessage);
+      }
+    };
+}
 
 function showMessage(message) {
   var messageElem = document.createElement('div');
@@ -42,7 +70,13 @@ function showMessage(message) {
   document.getElementById('messages_list').appendChild(messageElem);
 }
 
-function login_success(username) {
+function login_success() {
     document.getElementById('login_div').style.display = "none";
     document.getElementById('room_div').style.display = "block";
+}
+
+function logout() {
+    username = "";
+    document.getElementById('login_div').style.display = "block";
+    document.getElementById('room_div').style.display = "none";
 }

@@ -8,7 +8,7 @@
 -behaviour(supervisor).
 
 %% API
--export([start_link/0]).
+-export([start_link/0, start_room/1]).
 
 %% Supervisor callbacks
 -export([init/1]).
@@ -20,7 +20,10 @@
 %%====================================================================
 
 start_link() ->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+	supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+
+start_room(Name) ->
+	supervisor:start_child(?SERVER, [Name]).
 
 %%====================================================================
 %% Supervisor callbacks
@@ -28,7 +31,11 @@ start_link() ->
 
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
-    {ok, { {one_for_all, 0, 1}, []} }.
+	Room = {room,
+		{websocket_chat_room, start_link, []},
+		permanent, 3000, worker, [websocket_chat_room]
+		},
+	{ok, { {simple_one_for_one, 1, 30}, [Room]} }.
 
 %%====================================================================
 %% Internal functions

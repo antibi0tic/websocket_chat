@@ -5,3 +5,7 @@ body {
 .center {
     text-align: center;
 }
+
+div#room_div {
+    height: 500px;
+}

@@ -1,0 +1,1 @@
+-define(ROOMS_TABLE, websocket_chat_room).
