@@ -5,17 +5,17 @@
 -module(handler_websocket).
 
 %% API
--export([response_logout/2, response_new_message/3]).
+-export([response_login/2, response_logout/2, response_new_message/3]).
 
 %% Callbacks
--export([init/2, websocket_init/1, websocket_handle/2, websocket_info/3, websocket_terminate/3]).
+-export([init/2, websocket_handle/2, websocket_info/2, websocket_terminate/2]).
 
 %%%===================================================================
 %%% API
 %%%===================================================================
 
 response_login(Pid, Room) ->
-	response(Pid, Room, <<"login">>, <<"200">>).
+	response(Pid, Room, <<"login">>, <<"success">>).
 
 response_logout(Pid, Room) ->
 	response(Pid, Room, <<"logout">>, <<"">>).
@@ -27,18 +27,16 @@ response_new_message(Pid, Room, Msg) ->
 %%% Callbacks
 %%%===================================================================
 
-init(Req, Opts) ->
-	{cowboy_websocket, Req, Opts}.
-
-websocket_init(State) ->
-	{ok, State}.
+init(Req, State) ->
+	{cowboy_websocket, Req, State}.
 
 websocket_handle({text, Msg}, State) ->
+	MsgMap = jsx:decode(Msg, [return_maps]),
 	#{
 		<<"room">> := Room,
 		<<"req">> := Req,
 		<<"data">> := Data
-	} =  jsx:decode(Msg, [return_maps]),
+	} =  MsgMap,
 	case Req of
 		<<"login">> -> websocket_chat_room:login(Room, Data);
 		<<"send_message">> -> websocket_chat_room:send_message(Room, Data);
@@ -48,11 +46,11 @@ websocket_handle({text, Msg}, State) ->
 websocket_handle(_Data, State) ->
 	{ok, State}.
 
-websocket_info(Info, Req, State) ->
+websocket_info(Info, State) ->
 	Msg = jsx:encode(Info),
-	{reply, {text, Msg}, Req, State}.
+	{reply, {text, Msg}, State}.
 
-websocket_terminate(_Reason, _Req, _State) ->
+websocket_terminate(_Reason, _State) ->
 	ok.
 
 %% Internal functions

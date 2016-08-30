@@ -79,6 +79,8 @@ handle_call(_Request, _From, State) ->
 
 handle_cast({login, {Username, Pid}}, #state{users = OldUsers} = State) ->
 	User = #user{name = Username, pid = Pid},
+	%% TODO: check if user already in room
+	handler_websocket:response_login(Pid, State#state.name),
 	{noreply, State#state{users = [User | OldUsers]}};
 
 handle_cast({logout, Pid}, #state{users = OldUsers} = State) ->
@@ -96,8 +98,8 @@ handle_cast({send_message, {Pid, Msg}}, #state{users = Users, messages = Message
 											true -> [FmtMsg | lists:droplast(Messages)]
 										end,
 			lists:foreach(
-				fun(#user{pid = Pid}) ->
-					handler_websocket:response_new_message(Pid, Room, FmtMsg)
+				fun(#user{pid = UserPid}) ->
+					handler_websocket:response_new_message(UserPid, Room, FmtMsg)
 				end,
 				Users),
 			{noreply, State#state{messages = NewMessages}}

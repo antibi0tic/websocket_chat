@@ -31,11 +31,11 @@ start_room(Name) ->
 
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
-	Room = {room,
-		{websocket_chat_room, start_link, []},
+	MainRoom = {<<"main">>,
+		{websocket_chat_room, start_link, [<<"main">>]},
 		permanent, 3000, worker, [websocket_chat_room]
 		},
-	{ok, { {simple_one_for_one, 1, 30}, [Room]} }.
+	{ok, { {one_for_one, 1, 30}, [MainRoom]} }.
 
 %%====================================================================
 %% Internal functions

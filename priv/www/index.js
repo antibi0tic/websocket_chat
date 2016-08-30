@@ -7,7 +7,7 @@ function start_chat()
     username = "";
 
     socket.onopen = function() {
-      alert("Connection opened.");
+      console.log("Connection opened.");
     };
 
     socket.onclose = function(event) {
@@ -34,7 +34,7 @@ function start_chat()
                 data: username
               };
 
-        socket.send(outgoingMessage);
+        socket.send(JSON.stringify(outgoingMessage));
       }
       return false;
     };
@@ -49,17 +49,19 @@ function start_chat()
                     data: this.message.value.trim()
                   };
 
-            socket.send(outgoingMessage);
+            socket.send(JSON.stringify(outgoingMessage));
           }
           return false;
         };
 
     socket.onmessage = function(event) {
-      var incomingMessage = event.data;
-      if (incomingMessage === "welcome") {
+      var incomingMessage = JSON.parse(event.data);
+      if (incomingMessage.resp === "login" && incomingMessage.data === "success") {
         login_success();
+      } else if (incomingMessage.resp === "new_message") {
+        showMessage(incomingMessage.data);
       } else {
-        showMessage(incomingMessage);
+        console.log("Strange incoming message: " + event.data);
       }
     };
 }

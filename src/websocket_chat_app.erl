@@ -15,7 +15,6 @@
 -export([fast_start/0, fast_stop/0]).
 
 -define(DEFAULT_PORT, 8088).
--define(ROOM_LIST, [<<"main">>]).
 
 %%====================================================================
 %% API
@@ -31,8 +30,7 @@ start(_StartType, _StartArgs) ->
 	]),
 	{ok, _} = cowboy:start_clear(http, 100, [{port, ?DEFAULT_PORT}], #{env => #{dispatch => Dispatch}}),
 	ets:new(?ROOMS_TABLE, [public, named_table]),
-	websocket_chat_sup:start_link(),
-	lists:foreach(websocket_chat_sup:start_room/1, ?ROOM_LIST).
+	websocket_chat_sup:start_link().
 
 %%--------------------------------------------------------------------
 stop(_State) ->
