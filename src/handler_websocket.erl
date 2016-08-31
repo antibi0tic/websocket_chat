@@ -5,7 +5,11 @@
 -module(handler_websocket).
 
 %% API
--export([response_login/2, response_logout/2, response_new_message/3]).
+-export([response_login/2,
+	response_logout/2,
+	response_new_message/3,
+	response_message_history/3,
+	response_users/3]).
 
 %% Callbacks
 -export([init/2, websocket_handle/2, websocket_info/2, websocket_terminate/2]).
@@ -22,6 +26,12 @@ response_logout(Pid, Room) ->
 
 response_new_message(Pid, Room, Msg) ->
 	response(Pid, Room, <<"new_message">>, Msg).
+
+response_message_history(Pid, Room, Messages) ->
+	response(Pid, Room, <<"message_history">>, Messages).
+
+response_users(Pid, Room, Users) ->
+	response(Pid, Room, <<"users">>, Users).
 
 %%%===================================================================
 %%% Callbacks
@@ -40,7 +50,9 @@ websocket_handle({text, Msg}, State) ->
 	case Req of
 		<<"login">> -> chat_room:login(Room, Data);
 		<<"send_message">> -> chat_room:send_message(Room, Data);
-		<<"logout">> -> chat_room:logout(Room)
+		<<"logout">> -> chat_room:logout(Room);
+		<<"message_history">> -> chat_room:get_messages(Room);
+		<<"users">> -> chat_room:get_users(Room)
 	end,
 	{ok, State};
 websocket_handle(_Data, State) ->

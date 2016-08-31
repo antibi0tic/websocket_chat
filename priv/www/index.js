@@ -1,5 +1,6 @@
 var socket;
 var username;
+var users_list;
 
 function start_chat()
 {
@@ -28,13 +29,7 @@ function start_chat()
       if (!username) {
         alert("Enter username");
       } else {
-        var outgoingMessage = {
-                room: "main",
-                req: "login",
-                data: username
-              };
-
-        socket.send(JSON.stringify(outgoingMessage));
+        request("login", username);
       }
       return false;
     };
@@ -43,13 +38,7 @@ function start_chat()
           if (!username) {
             alert("Enter username");
           } else {
-            var outgoingMessage = {
-                    room: "main",
-                    req: "send_message",
-                    data: this.message.value.trim()
-                  };
-
-            socket.send(JSON.stringify(outgoingMessage));
+            request("send_message", this.message.value.trim());
           }
           return false;
         };
@@ -58,12 +47,23 @@ function start_chat()
       var incomingMessage = JSON.parse(event.data);
       if (incomingMessage.resp === "login" && incomingMessage.data === "success") {
         login_success();
+        request("message_history");
+        request("users");
       } else if (incomingMessage.resp === "new_message") {
         showMessage(incomingMessage.data);
       } else {
         console.log("Strange incoming message: " + event.data);
       }
     };
+}
+
+function request(req_type, req_data = "") {
+    var outgoingMessage = {
+                        room: "main",
+                        req: req_type,
+                        data: req_data
+                      };
+    socket.send(JSON.stringify(outgoingMessage));
 }
 
 function showMessage(message) {

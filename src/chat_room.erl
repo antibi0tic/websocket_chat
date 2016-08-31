@@ -105,6 +105,15 @@ handle_cast({send_message, {Pid, Msg}}, #state{users = Users, messages = Message
 			{noreply, State#state{messages = NewMessages}}
 	end;
 
+handle_cast({get_messages, Pid}, #state{messages = Messages, name = Room} = State) ->
+	handler_websocket:response_message_history(Pid, Room, Messages),
+	{noreply, State};
+
+handle_cast({get_users, Pid}, #state{users = Users, name = Room} = State) ->
+	UserNames = [Name || #user{name = Name} <- Users],
+	handler_websocket:response_users(Pid, Room, UserNames),
+	{noreply, State};
+
 handle_cast(_Request, State) ->
 	{noreply, State}.
 
@@ -122,5 +131,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
-format_message(_Username, MsgText) ->
-	MsgText.
+format_message(Username, MsgText) ->
+	{{Y, M, D},{HH, MI, SS}} = calendar:universal_time(),
+	Timestamp = unicode:characters_to_binary(io_lib:format("~p.~p.~p ~p:~p:~p ", [Y, M, D, HH, MI, SS])),
+	<<Timestamp/bitstring, "@"/utf8, Username/bitstring, ": "/utf8, MsgText/bitstring>>.
