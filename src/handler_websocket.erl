@@ -38,9 +38,9 @@ websocket_handle({text, Msg}, State) ->
 		<<"data">> := Data
 	} =  MsgMap,
 	case Req of
-		<<"login">> -> websocket_chat_room:login(Room, Data);
-		<<"send_message">> -> websocket_chat_room:send_message(Room, Data);
-		<<"logout">> -> websocket_chat_room:logout(Room)
+		<<"login">> -> chat_room:login(Room, Data);
+		<<"send_message">> -> chat_room:send_message(Room, Data);
+		<<"logout">> -> chat_room:logout(Room)
 	end,
 	{ok, State};
 websocket_handle(_Data, State) ->

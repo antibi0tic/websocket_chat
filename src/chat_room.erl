@@ -2,7 +2,7 @@
 %%% @doc
 %%% @end
 %%%-------------------------------------------------------------------
--module(websocket_chat_room).
+-module(chat_room).
 
 -include("websocket_chat.hrl").
 
