@@ -15,12 +15,19 @@
     </form>
 </div>
 <div id="room_div" style="display: none">
-    <div id="messages_list"></div>
     <form name="send_message_form">
-        <label>Msg:</label>
+        <label id="greeting">Msg:</label>
         <input type="text" name="message"/>
         <input type="submit" value="Send"/>
     </form>
+    <div class="users">
+        <div style="background-color: #80cbc4">Users in room:</div>
+        <div id="users_list"></div>
+    </div>
+    <div class="messages_history">
+        <div style="background-color: #80cbc4">Messages history:</div>
+        <div id="messages_list"></div>
+    </div>
 </div>
 </body>
 </html>

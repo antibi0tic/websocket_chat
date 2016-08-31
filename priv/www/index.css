@@ -9,3 +9,28 @@ body {
 div#room_div {
     height: 500px;
 }
+
+div .users {
+    width: 300px;
+    height: 500px;
+    float: left;
+    overflow: auto;
+    margin: 5px;
+    border-width: thin;
+    border-color: aqua;
+    border-style: solid;
+    padding: 5px;
+}
+
+div .messages_history {
+    text-align: left;
+    width: 500px;
+    height: 500px;
+    float: left;
+    overflow: auto;
+    margin: 5px;
+    border-width: thin;
+    border-color: aqua;
+    border-style: solid;
+    padding: 5px;
+}

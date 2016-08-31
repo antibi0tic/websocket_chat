@@ -63,6 +63,7 @@ websocket_info(Info, State) ->
 	{reply, {text, Msg}, State}.
 
 websocket_terminate(_Reason, _State) ->
+	%% TODO: logout here
 	ok.
 
 %% Internal functions
