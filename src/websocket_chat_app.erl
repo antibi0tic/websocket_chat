@@ -14,7 +14,7 @@
 %% Debug starting callbacks
 -export([fast_start/0, fast_stop/0]).
 
--define(DEFAULT_PORT, 8088).
+-define(DEFAULT_PORT, 8080).
 
 %%====================================================================
 %% API
@@ -28,7 +28,7 @@ start(_StartType, _StartArgs) ->
 			{"/[...]", cowboy_static, {priv_dir, websocket_chat, "www"}}
 		]}
 	]),
-	{ok, _} = cowboy:start_clear(http, 100, [{port, ?DEFAULT_PORT}], #{env => #{dispatch => Dispatch}}),
+	{ok, _} = cowboy:start_clear(http, [{port, ?DEFAULT_PORT}], #{env => #{dispatch => Dispatch}}),
 	ets:new(?ROOMS_TABLE, [public, named_table]),
 	websocket_chat_sup:start_link().
 
@@ -38,12 +38,7 @@ stop(_State) ->
 
 %%--------------------------------------------------------------------
 fast_start() ->
-	application:start(ranch),
-	application:start(crypto),
-	application:start(cowlib),
-	application:start(cowboy),
-	application:start(jsx),
-	application:start(websocket_chat).
+	application:ensure_all_started(websocket_chat).
 
 %%--------------------------------------------------------------------
 fast_stop() ->
@@ -51,8 +46,9 @@ fast_stop() ->
 	application:stop(jsx),
 	application:stop(cowboy),
 	application:stop(cowlib),
+	application:stop(ranch),
 	application:stop(crypto),
-	application:stop(ranch).
+	application:stop(ssl).
 
 %%====================================================================
 %% Internal functions

@@ -15,4 +15,3 @@ logs
 _build
 .idea
 websocket_chat.iml
-rebar.lock
