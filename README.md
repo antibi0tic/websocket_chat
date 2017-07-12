@@ -1,17 +1,33 @@
-WebSocket chat
-=====
-Simple web-chat written on Erlang
-and based on WebSockets as transport layer.
+# WebSocket chat
 
-Extra goal (not done): do it without cowboy. :)
+Simple web-chat written on Cowboy, Erlang and based on WebSockets as transport layer.
 
+## Requirements
 
-Build
------
+[Rebar3](https://github.com/erlang/rebar3) tool is used for project lifecycle
 
-    $ make compile
+```bash
+wget https://s3.amazonaws.com/rebar3/rebar3 && chmod +x rebar
+```
 
-Run
----
+## Build
 
-    $ make start
+```bash
+$ make compile
+===> Verifying dependencies...
+===> Compiling cowlib
+===> Compiling ranch
+===> Compiling jsx
+===> Compiling cowboy
+===> Compiling websocket_chat
+```
+
+## Run
+
+```bash
+make start
+```
+
+## TODO
+
+- Extra goal do it without cowboy. :)
