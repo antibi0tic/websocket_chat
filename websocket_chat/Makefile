@@ -13,4 +13,4 @@ start: compile
 	erl -pa _build/default/lib/cowboy/ebin/ -pa _build/default/lib/cowlib/ebin/ -pa _build/default/lib/ranch/ebin/ -pa _build/default/lib/websocket_chat/ebin/ -pa _build/default/lib/jsx/ebin/ -s websocket_chat_app fast_start
 
 release:
-    rebar3 as prod release -o ./svcs
+	rebar3 as prod release -o ./svcs

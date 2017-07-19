@@ -1,0 +1,15 @@
+sudo: required
+language: erlang
+services:
+- docker
+env:
+  matrix:
+  - "— COMMIT=${TRAVIS_COMMIT::6} - NAMESPACE=websocket-chat"
+  global:
+    DOCKER_USER:
+      secure: vNrHyF7PFIIi3F9+CaHVybXn3FSQfR3yTLA27NVE8HbRoFIXV5QWwHvONLWQNdkNijAD2fqxpcDJhkhSHirFD/ihQA0CKvEby4Kj+ATIRk80U+k5CYVtPUdmHeRQym3aDb2xm0mHINKPsqAHk+8/23G61921MVn1zSOz9aIq56B4ab9U5FlmVfwn18d49WTep9TRr9Zd+wmj0h4nA+Ckz5yffHnukmVi/M05sUtYG9dcRBkO53/dgD0P9OHUfDEWh+xhv0xYmBQ53l00pyixzG+67b6FoqoEEnje+ZODGMTbpwgzqx/BXKqeLoruHTUdbYqmXN8seiTfAlEtVp3bzFXCcpAPbRU71EQJ886tKn4PKIRE65fGKE5MsI+WOA0gLnOrJ9csDv1v+AM0Doxu2sc2/sNKSV/3c4B2daF3MXng79p58bYA8w2D7o4usn8nSAZ0j3LbfCWnhELryEA1s41NIMDnMSe2oRZQqKsNYrv1YB60kaY67//QaEsPZo04hvNdRr5lttszzQHB2K9rNpwX0QDFMIUA32Xw6HfYhS76VTS4JxZ4fBO2lDy9I+N3h5Bq9D/JUM0i3/q0sbZCBsmOpGWxcYaRyxfHXdElpoU9WnPKHSFNo/hcd8Ciq63Z56X2R71P973X58dugpcYPjNqxkijWkZIMOg7iiJ0MUg=
+after_success: "— docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS —
+  export REPO=$DOCKER_USER/$NAMESPACE — export TAG=`if [ “$TRAVIS_BRANCH” == “master”
+  ]; then echo “latest”; else echo $TRAVIS_BRANCH ; fi` — echo $REPO:$TAG:$COMMIT
+  — docker build -f Dockerfile -t $REPO:$COMMIT . — docker tag $REPO:$COMMIT $REPO:$TAG
+  — docker tag $REPO:$COMMIT $REPO:$TRAVIS_BUILD_NUMBER — docker push $REPO"

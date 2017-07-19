@@ -16,3 +16,4 @@ _build
 .idea
 websocket_chat.iml
 rebar.lock
+websocket_chat/svcs/*
