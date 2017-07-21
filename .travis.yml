@@ -1,9 +1,14 @@
 sudo: required
 
-language: ruby
+language: erlang
+otp_release:
+  - 20.0
 
 services:
   - docker
+
+
+script "exit 0"
 
 env:
   global:
