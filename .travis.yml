@@ -1,8 +1,6 @@
 sudo: required
 
-language: erlang
-otp_release:
-  - 20.0
+language: ruby
 
 services:
   - docker
