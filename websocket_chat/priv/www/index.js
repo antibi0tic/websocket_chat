@@ -3,7 +3,7 @@ var username;
 
 function start_chat()
 {
-    socket = new WebSocket("ws://localhost:8080/websocket");
+    socket = new WebSocket("ws://" + location.hostname+(location.port ? ':' + location.port: '') + "/websocket");
     username = "";
 
     socket.onopen = function() {
