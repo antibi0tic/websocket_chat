@@ -7,9 +7,6 @@ otp_release:
 services:
   - docker
 
-
-script: "exit 0"
-
 env:
   global:
     - secure: "r1KdNXWbHRDJrWykd/ljStb4Z1H7wb7bdgoBbFkwSGHqinbLdokfbb5xIVlyBXAwGdhzQ0tGDrnT3Llx50ZNW1pxVifFnSaztKJ0FA78AN/HnNSvNafAde5/f4rOrwOF49+q+BYVGS2LBBQ/hU5HPxay3NJfvJ4I4crHLCaA05HPwSaa3EXfAcmKenikpKo/SECtIC3EW+MudAaohOWiAlpeJ3OIPJvW1EYY5N0NE9SnSYQ8iivyO7/WoRhKiePjJXcJw9qODkN2MRCOdP7sNv+7PX2hWpGNSTaORzJhnP2jodpRlNhOBV0aWK6VfKXqoEiO/E8ekc7B34ZxjH9hNECLpzWCHEuLax4gni+ynP9BR6Lytk4IkRC4lNOW0HXEV2y+mB3wIxLDEzG6a3TgKwRVX6PLRr6UmqZG7BwI55GCgjzwptzeM8OtjtnqWMYMC1FNQ4JSYwDRvma3Bqzy/5E1AMUpu52mwUBhnrZeeh3Z6UwNGZsYBYFox4GF1/ZOGJoAk/00oVjx008tM9MQjw5A6FZpxJC3VOxfUp397HQeeegftoy8TUEEsGfoa6878u/v0CkO42PJpkKjGciCqgjlF19EZwkVLng/qFwCj6YaJPUcWPKoYfzGgObgV8mwxZXX5wG4ZqOHkUDrGzCyxQeBNpNg9IIhdIq9buZ6sEc="
@@ -17,9 +14,9 @@ env:
     - secure: "X3h9wt5AszKZOjcLHlIAev15tszYPAa906bXGZrM/KWYja88uY8MLLMMcRMZKGlW6+TBpqb2jPtcxvTyFhIE3Xgf2sHo3eTxR/LS/7R4n0Ye/JyNe9kJsbV/bIzgbfxEkeKNom4pjWvgWMesna0DVV4UFk56z9fMXduohFOL45iB5V3tQ2f0q5zOZxyFFmwr1zHgA4fIab/h2ATc+qHmIit9HnPwTpQ3OtMoBrYqf7vu8/LSqaHjGoMOj1yVV6cCxIB/GdKP6BAV7Lihx0fp8y7s9Lyd3Z7qz6f5omfqwujeVr0nWTawgJKlejEw23GojMc7PY2wIvij+xLd8ouBoIxQ6l2hj5/yzorFbnL2kCju0Ej3If9u8qS040Pr4QTC6oAW0auHm43pw/NLMVB2wM7QXfZEpyvgJy4nlN0ezoHggwzkYci49A/9znlKASCqAwHt5wwnC6qPsTHJK9OEA0KwhSewO0knuQy8iqERIVwXZPXlLXkpDdW2SRP5w6yKLcFpFupCo3/IYJIrn8XQfhhTrWQVR2Qt8joy99ei4HAT9F83tLjS1YVPg0qRV3X7eUzTckaKYx3TIXgyX3giskJ7TM3K83pKlSBZORdFBScun2VdYLwYtZdvUJTteYbGrjxDP/9JU2XJhJXbeDXtoUHIsouTQibdS9Zvpp0Or8w="
     - COMMIT=${TRAVIS_COMMIT::8}
 
-after_success:
+script:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-  - export REPO=sebestblog/travis-demo
+  - export REPO=$DOCKER_USER/websocket_chat
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - docker build -f Dockerfile -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
