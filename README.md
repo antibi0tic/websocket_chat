@@ -1,5 +1,7 @@
 # WebSocket chat
 
+[![Build Status](https://travis-ci.org/hayorov/websocket_chat.svg?branch=master)](https://travis-ci.org/hayorov/websocket_chat)
+
 Simple web-chat written on Cowboy, Erlang and based on WebSockets as transport layer.
 
 ## Requirements
